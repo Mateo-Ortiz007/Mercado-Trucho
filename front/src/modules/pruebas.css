@@ -1,0 +1,206 @@
+/* RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  background: #ffe600;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.header button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* GRID PRODUCTOS */
+.container {
+  max-width: 1200px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 12px;
+}
+
+.card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  width: 350px;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.modal button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background: #3483fa;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* CARRITO */
+.carrito {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.qty {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.qty button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+
+.filtros {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.filtros input {
+  width: 200px;
+}
+
+/* FADE + SCALE */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* PRODUCTOS */
+.container,
+.carrito,
+.checkout {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* HOVER PRO */
+.card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* BOTONES */
+button {
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+button:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+
+/* MODAL */
+.modal {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.img-producto {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+}
+
+.img-carrito {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}

@@ -1,0 +1,32 @@
+.ml-header {
+  background-color: #ffe600;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.search {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.cart-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+.ml-header input {
+  width: 300px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
