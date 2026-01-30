@@ -232,3 +232,7 @@
   border-radius: 8px;
   margin-top: 10px;
 }
+
+.modal input:not([type="file"]) {
+  pointer-events: auto;
+}

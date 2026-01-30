@@ -1,4 +1,4 @@
-import "../modules/header.css";
+import "../styles/header.css";
 
 function Header({ cantidad, onCarrito, onSearch }) {
   return (
@@ -14,6 +14,10 @@ function Header({ cantidad, onCarrito, onSearch }) {
       <button className="cart-btn" onClick={onCarrito}>
         🛒 {cantidad}
       </button>
+
+      <span>
+        <a href="">Iniciar Sesion</a>
+      </span>
     </header>
   );
 }

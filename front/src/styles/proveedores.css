@@ -1,0 +1,211 @@
+.provider-page {
+  min-height: 100vh; /* 👈 NO height */
+  background: #020617;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 30px 20px;
+  gap: 40px;
+
+  overflow-x: hidden;
+}
+
+.provider-form {
+  background: #020617;
+  padding: 40px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.provider-form h2 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.provider-form input {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.provider-form input::placeholder {
+  color: #64748b;
+}
+
+.provider-form input[type="file"] {
+  border: none;
+}
+
+.provider-form button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.provider-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+}
+
+.provider-form label {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .provider-form {
+    padding: 20px;
+  }
+
+  .provider-form input,
+  .provider-form button {
+    font-size: 14px;
+  }
+
+  .provider-form img {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.provider-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ===== CARD PRODUCTO ===== */
+.provider-item {
+  background: #020617;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.provider-item strong {
+  font-size: 16px;
+}
+
+.provider-item p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* ===== BOTONES ===== */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.actions button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.actions button:first-child {
+  background: #22c55e;
+  color: #020617;
+}
+
+.actions button:last-child {
+  background: #ef4444;
+  color: #fff;
+}
+
+.actions button:hover {
+  opacity: 0.85;
+}
+
+.provider-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.provider-modal {
+  background: #020617;
+  padding: 30px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.provider-modal input {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+}
+
+.provider-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.provider-modal-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.provider-modal-actions button:first-child {
+  background: #334155;
+  color: white;
+}
+
+.provider-modal-actions button:last-child {
+  background: #22c55e;
+  color: #020617;
+}
+
+.provider-modal h3 {
+  color: #fff;
+}
+
+.provider-modal label {
+  color: #fff;
+}

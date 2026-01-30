@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./pruebas.css";
+import "../styles/pruebas.css";
 import Header from "./header";
 import ProductCard from "./productCard";
 import ProductModal from "./ProductoModal";

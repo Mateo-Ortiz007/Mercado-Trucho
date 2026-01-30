@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./admin.css";
+import "../styles/admin.css";
 
 function Admin() {
   const [productos, setProductos] = useState([]);

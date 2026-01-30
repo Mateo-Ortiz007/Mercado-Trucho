@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
 // POST con imagen
 router.post("/", upload.single("imagen"), (req, res) => {
   const { nombre, tipo, unidades, precio } = req.body;
-  const imagen = req.file.filename;
+  const imagen = req.file?.filename || null;
 
   db.query(
     "INSERT INTO productos (nombre, tipo, unidades, precio, imagen) VALUES (?, ?, ?, ?, ?)",
@@ -31,16 +31,26 @@ router.post("/", upload.single("imagen"), (req, res) => {
 router.put("/:id", upload.single("imagen"), (req, res) => {
   const { id } = req.params;
   const { nombre, tipo, unidades, precio } = req.body;
-  const imagen = req.file?.filename;
 
-  db.query(
-    "UPDATE productos SET nombre=?, tipo=?, unidades=?, precio=?, imagen=? WHERE id=?",
-    [nombre, tipo, unidades, precio, imagen, id],
-    (err) => {
-      if (err) return res.status(500).json(err);
-      res.json({ msg: "Producto actualizado" });
-    },
-  );
+  let sql = `
+    UPDATE productos 
+    SET nombre=?, tipo=?, unidades=?, precio=?
+  `;
+  const values = [nombre, tipo, unidades, precio];
+
+  // solo si viene imagen
+  if (req.file) {
+    sql += ", imagen=?";
+    values.push(req.file.filename);
+  }
+
+  sql += " WHERE id=?";
+  values.push(id);
+
+  db.query(sql, values, (err) => {
+    if (err) return res.status(500).json(err);
+    res.json({ msg: "Producto actualizado" });
+  });
 });
 
 // DELETE
