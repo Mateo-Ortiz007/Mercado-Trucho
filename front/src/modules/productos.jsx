@@ -1,204 +1,236 @@
 import { useState, useEffect } from "react";
-import "../styles/pruebas.css";
-import Header from "./header";
-import ProductCard from "./productCard";
-import ProductModal from "./ProductoModal";
+import "../styles/productos.css";
 
-function Pruebas() {
-  const API_URL = import.meta.env.VITE_API_URL;
-  const [open, setOpen] = useState(false);
-  const [producto, setProducto] = useState(null);
-  const [verCarrito, setVerCarrito] = useState(false);
-  const [search, setSearch] = useState("");
-  const [checkout, setCheckout] = useState(false);
+function Productos() {
   const [productos, setProductos] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [productoEdit, setProductoEdit] = useState(null);
+  const [imagenFile, setImagenFile] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  const [maxPrecio, setMaxPrecio] = useState(1000);
-  const [carrito, setCarrito] = useState(() => {
-    const saved = localStorage.getItem("carrito");
-    return saved ? JSON.parse(saved) : [];
+  const [form, setForm] = useState({
+    nombre: "",
+    tipo: "",
+    precio: "",
+    unidades: "",
   });
-  useEffect(() => {
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-  }, [carrito]);
+  const cargarProductos = async () => {
+    const res = await fetch("http://localhost:3000/productos");
+    const data = await res.json();
+    setProductos(data);
+  };
 
+  // ================= LOAD =================
   useEffect(() => {
-    fetch("http://localhost:3000/productos")
-      .then((res) => res.json())
-      .then((data) => setProductos(data));
+    cargarProductos();
   }, []);
 
+  // ================= CREATE =================
+  const crearProducto = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("nombre", form.nombre);
+    data.append("tipo", form.tipo);
+    data.append("precio", form.precio);
+    data.append("unidades", form.unidades);
+    data.append("imagen", imagenFile);
+
+    await fetch("http://localhost:3000/productos", {
+      method: "POST",
+      body: data,
+    });
+
+    setForm({ nombre: "", tipo: "", precio: "", unidades: "" });
+    setImagenFile(null);
+    setPreview(null);
+    cargarProductos();
+  };
+
+  // ================= OPEN MODAL =================
   const abrirModal = (p) => {
-    setProducto(p);
-    setOpen(true);
+    setProductoEdit({ ...p });
+    setPreview(`http://localhost:3000/uploads/${p.imagen}`);
+    setImagenFile(null);
+    setModalOpen(true);
   };
 
   const cerrarModal = () => {
-    setOpen(false);
-    setProducto(null);
+    setModalOpen(false);
+    setProductoEdit(null);
+    setImagenFile(null);
+    setPreview(null);
   };
 
-  const agregarCarrito = async () => {
-    const existe = carrito.find((i) => i.id === producto.id);
+  // ================= UPDATE =================
+  const guardarCambios = async () => {
+    const data = new FormData();
+    data.append("nombre", productoEdit.nombre);
+    data.append("tipo", productoEdit.tipo);
+    data.append("precio", productoEdit.precio);
+    data.append("unidades", productoEdit.unidades);
+    if (imagenFile) data.append("imagen", imagenFile);
 
-    if (existe) {
-      await fetch(`http://localhost:3000/carrito/${producto.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ delta: 1 }),
-      });
-
-      setCarrito(
-        carrito.map((i) =>
-          i.id === producto.id ? { ...i, qty: i.qty + 1 } : i,
-        ),
-      );
-    } else {
-      await fetch("http://localhost:3000/carrito", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...producto, qty: 1 }),
-      });
-
-      setCarrito([...carrito, { ...producto, qty: 1 }]);
-    }
-
-    cerrarModal();
-  };
-
-  const cambiarQty = async (id, delta) => {
-    await fetch(`http://localhost:3000/carrito/${id}`, {
+    await fetch(`http://localhost:3000/productos/${productoEdit.id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ delta }),
+      body: data,
     });
 
-    setCarrito(
-      carrito
-        .map((i) => (i.id === id ? { ...i, qty: i.qty + delta } : i))
-        .filter((i) => i.qty > 0),
-    );
+    cerrarModal();
+    cargarProductos();
   };
 
-  const total = carrito.reduce((s, p) => s + p.precio * p.qty, 0);
-  const cantidad = carrito.reduce((s, p) => s + p.qty, 0);
+  // ================= DELETE =================
+  const eliminarProducto = async (id) => {
+    if (!confirm("¿Eliminar producto?")) return;
+    await fetch(`http://localhost:3000/productos/${id}`, { method: "DELETE" });
+    cargarProductos();
+  };
 
   return (
-    <>
-      <Header
-        cantidad={cantidad}
-        onCarrito={() => setVerCarrito(!verCarrito)}
-        onSearch={setSearch}
-      />
-      <div className="filtros">
-        <label>Precio máximo:${maxPrecio}</label>
+    <div className="admin-page">
+      {/* ===== FORM CREAR ===== */}
+      <form className="admin-form" onSubmit={crearProducto}>
+        <h2>Nuevo producto</h2>
+        <label>Nombre</label>
         <input
-          type="range"
-          min="1"
-          max="1000"
-          value={maxPrecio}
-          onChange={(e) => setMaxPrecio(Number(e.target.value))}
+          placeholder="Nombre"
+          value={form.nombre}
+          onChange={(e) => setForm({ ...form, nombre: e.target.value })}
         />
+        <label>Tipo</label>
+
+        <input
+          placeholder="Tipo"
+          value={form.tipo}
+          onChange={(e) => setForm({ ...form, tipo: e.target.value })}
+        />
+        <label>Precio</label>
+        <input
+          type="number"
+          placeholder="Precio"
+          value={form.precio}
+          onChange={(e) => setForm({ ...form, precio: e.target.value })}
+        />
+
+        <label>Stock</label>
+
+        <input
+          type="number"
+          placeholder="Stock"
+          value={form.unidades}
+          onChange={(e) => setForm({ ...form, unidades: e.target.value })}
+        />
+        <label>Imagen</label>
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            setImagenFile(e.target.files[0]);
+            setPreview(URL.createObjectURL(e.target.files[0]));
+          }}
+        />
+
+        {preview && <img src={preview} className="preview-img" />}
+
+        <button>Guardar</button>
+        <button
+          type="button"
+          onClick={() => {
+            setForm({
+              nombre: "",
+              tipo: "",
+              unidades: "",
+              precio: "",
+            });
+            setImagenFile(null);
+            setPreview(null);
+          }}
+        >
+          Cancelar
+        </button>
+      </form>
+
+      {/* ===== LISTA ===== */}
+      <div className="admin-list">
+        {productos.map((p) => (
+          <div className="admin-item" key={p.id}>
+            <img src={`http://localhost:3000/uploads/${p.imagen}`} />
+            <strong>{p.nombre}</strong>
+            <p>${p.precio}</p>
+            <p>Stock: {p.unidades}</p>
+
+            <div className="actions">
+              <button onClick={() => abrirModal(p)}>Editar</button>
+              <button onClick={() => eliminarProducto(p.id)}>Eliminar</button>
+            </div>
+          </div>
+        ))}
       </div>
-      {/* PRODUCTOS */}
-      {!verCarrito && !checkout && (
-        <div className="container">
-          {productos
-            .filter(
-              (p) =>
-                p.nombre.toLowerCase().includes(search.toLowerCase()) &&
-                p.precio <= maxPrecio,
-            )
-            .map((p) => (
-              <ProductCard key={p.id} producto={p} onClick={abrirModal} />
-            ))}
-        </div>
-      )}
 
-      {/* CARRITO */}
-      {verCarrito && !checkout && (
-        <div className="carrito">
-          <h2>Tu carrito</h2>
-          {carrito.length === 0 && (
-            <p className="carrito-vacio">Tu carrito está vacío</p>
-          )}
+      {/* ===== MODAL EDITAR ===== */}
+      {modalOpen && productoEdit && (
+        <div className="modal-overlay" onClick={cerrarModal}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Editar producto</h3>
+            <label>Nombre</label>
+            <input
+              value={productoEdit.nombre}
+              onChange={(e) =>
+                setProductoEdit({ ...productoEdit, nombre: e.target.value })
+              }
+            />
 
-          {carrito.map((p) => (
-            <div className="item" key={p.id}>
-              <img
-                src={`http://localhost:3000/uploads/${p.imagen}`}
-                className="img-carrito"
-              />
-              <span>{p.nombre}</span>
+            <label>Tipo</label>
 
-              <div className="qty">
-                <button onClick={() => cambiarQty(p.id, -1)}>-</button>
-                <span>{p.qty}</span>
-                <button onClick={() => cambiarQty(p.id, 1)}>+</button>
-              </div>
+            <input
+              value={productoEdit.tipo}
+              onChange={(e) =>
+                setProductoEdit({ ...productoEdit, tipo: e.target.value })
+              }
+            />
 
-              <span>${p.precio * p.qty}</span>
+            <label>Precio</label>
+
+            <input
+              type="number"
+              value={productoEdit.precio}
+              onChange={(e) =>
+                setProductoEdit({ ...productoEdit, precio: e.target.value })
+              }
+            />
+            <label>Stock</label>
+
+            <input
+              type="number"
+              value={productoEdit.unidades}
+              onChange={(e) =>
+                setProductoEdit({ ...productoEdit, unidades: e.target.value })
+              }
+            />
+
+            <label>Imagen</label>
+
+            <input
+              type="file"
+              onChange={(e) => {
+                setImagenFile(e.target.files[0]);
+                setPreview(URL.createObjectURL(e.target.files[0]));
+              }}
+            />
+
+            {preview && <img src={preview} className="preview-img" />}
+
+            <div className="admin-modal-actions">
+              <button onClick={cerrarModal}>Cancelar</button>
+              <button onClick={guardarCambios}>Guardar</button>
             </div>
-          ))}
-
-          <h3>Total: ${total}</h3>
-
-          <button
-            className="btn-checkout"
-            disabled={carrito.length === 0}
-            onClick={() => setCheckout(true)}
-          >
-            Continuar compra
-          </button>
+          </div>
         </div>
       )}
-
-      {/* CHECKOUT */}
-      {checkout && (
-        <div className="checkout">
-          <h2>Resumen de compra</h2>
-
-          {carrito.map((p) => (
-            <div key={p.id} className="checkout-item">
-              <span>{p.nombre}</span>
-              <span>
-                {p.qty} x ${p.precio}
-              </span>
-            </div>
-          ))}
-
-          <h3>Total a pagar: ${total}</h3>
-
-          <button
-            className="btn-pagar"
-            onClick={() => {
-              alert("🎉 Compra realizada 🎉");
-              setCarrito([]);
-              setCheckout(false);
-              setVerCarrito(false);
-            }}
-          >
-            Pagar
-          </button>
-          <button
-            className="btn-pagar"
-            onClick={() => {
-              setCheckout(false);
-              setVerCarrito(false);
-            }}
-          >
-            cancelar
-          </button>
-        </div>
-      )}
-
-      <ProductModal
-        producto={open ? producto : null}
-        onClose={cerrarModal}
-        onAdd={agregarCarrito}
-      />
-    </>
+    </div>
   );
 }
 
-export default Pruebas;
+export default Productos;
