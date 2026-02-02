@@ -160,7 +160,7 @@ function Proveedores() {
                 })
               }
             />
-            <div className="modal-actions">
+            <div className="provider-modal-actions">
               <button onClick={cerrarModal}>Cancelar</button>
               <button onClick={guardarCambios}>Guardar</button>
             </div>

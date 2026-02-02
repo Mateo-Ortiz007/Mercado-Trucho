@@ -173,7 +173,7 @@
   z-index: 1000;
 }
 
-.modal {
+.admin-modal {
   background: #020617;
   padding: 30px;
   border-radius: 14px;
@@ -183,22 +183,25 @@
   flex-direction: column;
   gap: 12px;
 }
-
-.modal input {
-  background: #020617;
+.admin-modal .save-button {
+  color: #22c55e;
+}
+.admin-modal input {
+  background: #1e293b;
   border: 1px solid #1e293b;
-  padding: 10px;
-  color: white;
+  padding: 5px;
+  color: rgb(243, 243, 243);
   border-radius: 8px;
 }
 
-.modal-actions {
+.admin-modal-actions {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  font-size: 15px;
 }
 
-.modal-actions button {
+.admin-modal-actions button {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
@@ -207,25 +210,25 @@
   border: none;
 }
 
-.modal-actions button:first-child {
+.admin-modal-actions button:first-child {
   background: #334155;
-  color: white;
+  color: rgb(248, 248, 248);
 }
 
-.modal-actions button:last-child {
+.admin-modal-actions button:last-child {
   background: #22c55e;
   color: #020617;
 }
 
-.modal h3 {
+.admin-modal h3 {
   color: #fff;
 }
 
-.modal label {
+.admin-modal label {
   color: #fff;
 }
 
-.modal img {
+.admin-modal img {
   width: 120px;
   height: 120px;
   object-fit: cover;
@@ -233,6 +236,6 @@
   margin-top: 10px;
 }
 
-.modal input:not([type="file"]) {
+.admin-modal input:not([type="file"]) {
   pointer-events: auto;
 }

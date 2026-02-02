@@ -16,7 +16,10 @@ function Header({ cantidad, onCarrito, onSearch }) {
       </button>
 
       <span>
-        <a href="">Iniciar Sesion</a>
+        <a href="/login">Iniciar Sesion</a>
+      </span>
+      <span>
+        <a href="/register"> Registrarse</a>
       </span>
     </header>
   );
