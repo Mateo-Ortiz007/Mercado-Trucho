@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-router.post("/login", (req, res) => {
+router.post("/", (req, res) => {
   const { email, password } = req.body;
 
   db.query(

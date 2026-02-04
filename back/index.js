@@ -6,7 +6,7 @@ import cors from "cors";
 
 import productosRoutes from "./routes/productos.js";
 import proveedoresRoutes from "./routes/providers.js";
-import usuariosRoutes from "./routes/usuarios.js"; // ✅ CORRECTO
+import loginRoutes from "./routes/login.js";
 import registerRoutes from "./routes/register.js";
 
 const app = express();
@@ -17,9 +17,9 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/productos", productosRoutes);
 app.use("/proveedores", proveedoresRoutes);
-app.use("/usuarios", usuariosRoutes);
+app.use("/login", loginRoutes);
 app.use("/register", registerRoutes);
 
 app.listen(3000, () => {
-  console.log("Servidor en http://localhost:3000/register");
+  console.log("Servidor en http://localhost:3000");
 });

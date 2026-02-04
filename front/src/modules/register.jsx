@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "../styles/register.css";
 
 function Register() {
-  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -29,7 +28,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/usuarios/register`, {
+      const res = await fetch(`http://localhost:3000/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -45,7 +44,7 @@ function Register() {
       // ✅ registro correcto → login
       navigate("/login");
     } catch (err) {
-      console.error(err);
+      console.error(err).json;
       setError("Error de servidor");
     }
   };

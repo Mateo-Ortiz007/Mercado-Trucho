@@ -30,12 +30,11 @@ router.post("/", async (req, res) => {
       password,
     } = req.body;
 
-    // 🔐 hash contraseña
     const hash = await bcrypt.hash(password, 10);
 
-    const [result] = await db.query(
+    await db.query(
       `INSERT INTO usuarios 
-      (nombreDeUsuario, ApellidoDelUsuario, DocumentoDelUsuario, telefono, genero, email, password) 
+      (nombreDeUsuario, ApellidoDelUsuario, DocumentoDelUsuario, telefono, genero, email, password)
       VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         nombreDeUsuario,
@@ -48,18 +47,10 @@ router.post("/", async (req, res) => {
       ],
     );
 
-    res.status(201).json({
-      id: result.insertId,
-      nombreDeUsuario,
-      ApellidoDelUsuario,
-      DocumentoDelUsuario,
-      telefono,
-      genero,
-      email,
-    });
+    res.json({ msg: "Usuario registrado" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Error al registrar usuario" });
+    res.status(500).json({ msg: "Error al registrar" });
   }
 });
 
