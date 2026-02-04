@@ -9,7 +9,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:3000/usuarios/login", {
+    const res = await fetch(`http://localhost:3000/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -23,7 +23,7 @@ function Login() {
     }
 
     // ✅ login correcto → redirigir
-    window.location.href = "/productos";
+    window.location.href = "/home";
   };
 
   return (
