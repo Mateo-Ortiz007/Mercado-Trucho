@@ -1,29 +1,41 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const res = await fetch(`http://localhost:3000/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      setError(data.msg || "Error al iniciar sesión");
-      return;
+      if (!res.ok) {
+        setError(data.msg || "Error al iniciar sesión");
+        return;
+      }
+
+      // 🔥 GUARDAR USUARIO
+      localStorage.setItem("usuario", JSON.stringify(data));
+
+      // 🔥 Redirigir correctamente en React
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      setError("Error del servidor");
     }
-
-    // ✅ login correcto → redirigir
-    window.location.href = "/home";
   };
 
   return (
