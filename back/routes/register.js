@@ -7,7 +7,7 @@ const router = express.Router();
 // GET: obtener todos los usuarios (sin password)
 router.get("/", async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const [rows] = db.query(
       "SELECT id, nombreDeUsuario, ApellidoDelUsuario, DocumentoDelUsuario, telefono, genero, email FROM usuarios",
     );
     res.json(rows);
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
 
     const hash = await bcrypt.hash(password, 10);
 
-    await db.query(
+    db.query(
       `INSERT INTO usuarios 
       (nombreDeUsuario, ApellidoDelUsuario, DocumentoDelUsuario, telefono, genero, email, password)
       VALUES (?, ?, ?, ?, ?, ?, ?)`,

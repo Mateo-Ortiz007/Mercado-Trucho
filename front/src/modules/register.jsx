@@ -26,25 +26,26 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
-      const res = await fetch(`http://localhost:3000/register`, {
+      const res = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      const data = await res.json();
+      const data = await res.json(); // 👈 leer una sola vez
 
       if (!res.ok) {
-        setError(data.error || "Error al registrar");
+        setError(data.msg || "Error al registrar");
         return;
       }
 
-      // ✅ registro correcto → login
+      console.log(data); // "Usuario registrado"
       navigate("/login");
     } catch (err) {
-      console.error(err).json;
+      console.error(err);
       setError("Error de servidor");
     }
   };
